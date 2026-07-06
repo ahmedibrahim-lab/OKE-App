@@ -210,7 +210,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        cd app
+        cd tests
         npm install --no-audit
 
     - name: Install Playwright Browsers
