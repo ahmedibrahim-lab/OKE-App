@@ -210,7 +210,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        cd tests
+        cd ../tests
         npm install --no-audit
 
     - name: Install Playwright Browsers
@@ -224,4 +224,4 @@ jobs:
       with:
         name: playwright-report
         path: playwright-report/
-        retention-days: 30
+        retention-days: 3
