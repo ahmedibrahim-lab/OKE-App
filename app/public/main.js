@@ -60,9 +60,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Pod Health Metrics Fetching Logic
+    async function fetchHealthMetrics() {
+        try {
+            const response = await fetch('/api/health-metrics');
+            if (!response.ok) throw new Error('Failed to fetch health metrics');
+            const data = await response.json();
+            
+            // Update memory metrics
+            document.getElementById('memory-used').textContent = `${data.memory.usedMB}MB`;
+            document.getElementById('memory-label').textContent = 
+                `${data.memory.usedMB}MB / ${data.memory.limitMB}MB`;
+            document.getElementById('memory-bar').style.width = `${data.memory.percentage}%`;
+            
+            // Update uptime
+            document.getElementById('uptime-value').textContent = data.uptime.formatted;
+            document.getElementById('uptime-label').textContent = data.uptime.formatted;
+            
+            // Update health status badge
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            const healthStatus = data.health.status;
+            
+            statusText.textContent = healthStatus.charAt(0).toUpperCase() + healthStatus.slice(1);
+            statusDot.className = `status-indicator ${healthStatus === 'healthy' ? 'healthy' : 'warning'}`;
+            
+            // Update health checks
+            const checksContainer = document.getElementById('health-checks');
+            checksContainer.innerHTML = data.health.checks
+                .map(check => `
+                    <div class="health-check">
+                        <span class="check-name">${check.name}</span>
+                        <span class="check-status ${check.status}">${check.value}</span>
+                    </div>
+                `)
+                .join('');
+            
+        } catch (error) {
+            console.error('Failed to fetch health metrics:', error);
+        }
+    }
+    
     // Initial fetch on load
     fetchStats();
+    fetchHealthMetrics();
     
     // Fetch on click
     refreshBtn.addEventListener('click', fetchStats);
+    
+    // Auto-refresh health metrics every 5 seconds
+    setInterval(fetchHealthMetrics, 5000);
 });

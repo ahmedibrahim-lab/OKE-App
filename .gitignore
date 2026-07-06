@@ -1,8 +1,9 @@
 # Terraform
 .terraform/
-*.tfstate
-*.tfstate.backup
-.terraform.lock.hcl
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/.terraform.lock.hcl
 *.tfvars
 
 # Python / Flask
@@ -15,6 +16,16 @@ __pycache__/
 venv/
 ENV/
 
+# IDE
+.vscode/
+*.code-workspace
+.idea/
+
 # OS
 .DS_Store
 Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db

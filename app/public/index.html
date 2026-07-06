@@ -103,6 +103,47 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Pod Health Metrics Card -->
+            <div class="card-glass" id="health-info">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="icon">💚</span>
+                        <h3>Pod Health Status</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <!-- Memory Usage -->
+                        <div class="metric-card">
+                            <div class="metric-label">Memory Usage</div>
+                            <div class="metric-value" id="memory-used">--</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="memory-bar" style="width: 0%"></div>
+                            </div>
+                            <p class="metric-detail" id="memory-label">0MB / 256MB</p>
+                        </div>
+
+                        <!-- Pod Uptime -->
+                        <div class="metric-card">
+                            <div class="metric-label">Pod Uptime</div>
+                            <div class="metric-value" id="uptime-value">--</div>
+                            <div class="uptime-bar"></div>
+                            <p class="metric-detail" id="uptime-label">0s</p>
+                        </div>
+
+                        <!-- Health Status -->
+                        <div class="metric-card">
+                            <div class="metric-label">Overall Status</div>
+                            <div class="health-badge" id="health-status">
+                                <span class="status-indicator" id="status-dot"></span>
+                                <span id="status-text">--</span>
+                            </div>
+                            <div class="health-checks" id="health-checks"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- Technical Architecture Cards -->
