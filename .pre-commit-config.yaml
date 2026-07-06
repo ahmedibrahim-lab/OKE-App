@@ -1,0 +1,50 @@
+repos:
+  # General file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--unsafe]     # allows custom YAML tags (e.g. Helm templates)
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: [--maxkb=500]
+
+  # JavaScript / Node.js syntax check
+  - repo: local
+    hooks:
+      - id: node-syntax-check
+        name: Node.js Syntax Check
+        language: system
+        entry: node --check
+        files: \.js$
+        types: [file]
+
+  # Dockerfile linting with Hadolint
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.13.1-beta
+    hooks:
+      - id: hadolint-docker
+        name: Hadolint Dockerfile Linter
+        args: [--ignore, DL3018, --ignore, DL3008]
+
+  # Helm chart linting
+  - repo: local
+    hooks:
+      - id: helm-lint
+        name: Helm Lint
+        language: system
+        entry: helm lint helm/oke-app
+        pass_filenames: false
+        files: ^helm/
+
+  # Detect secrets / credentials accidentally committed
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: Detect Secrets
+        args: [--baseline, .secrets.baseline]
+        exclude: (\.trivyignore|terraform\.tfstate.*)
