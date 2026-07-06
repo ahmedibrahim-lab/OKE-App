@@ -1,6 +1,12 @@
 name: CI/CD DevSecOps & GitOps Pipeline
 
 on:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
   push:
     branches:
       - main
@@ -11,9 +17,13 @@ on:
       - '.gitignore'
 
 permissions:
-  contents: write # Required for committing changes back to git
+  contents: write      # Required for committing image tag back to git
+  pull-requests: write # Required to post status checks on PRs
 
 jobs:
+  # ─────────────────────────────────────────────────────────────
+  # JOB 1: Lint & Test — runs on BOTH PRs and pushes to main
+  # ─────────────────────────────────────────────────────────────
   lint-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -41,7 +51,49 @@ jobs:
         run: |
           helm lint helm/oke-app
 
+  # ─────────────────────────────────────────────────────────────
+  # JOB 2: Security scan on PR — build image and scan only, no push
+  # ─────────────────────────────────────────────────────────────
+  trivy-scan-pr:
+    if: github.event_name == 'pull_request'
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: uk-london-1.ocir.io
+      NAMESPACE: lryo68b31h2j
+      REPOSITORY: oke-app
+      IMAGE_TAG: pr-${{ github.event.pull_request.number }}-${{ github.sha }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image (PR check — no push)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./app
+          file: ./app/Dockerfile
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          trivyignores: .trivyignore
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 3: Build, scan, push, deploy — only on merge to main
+  # ─────────────────────────────────────────────────────────────
   build-scan-and-push:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: lint-and-test
     runs-on: ubuntu-latest
     env:
@@ -61,19 +113,19 @@ jobs:
         with:
           context: ./app
           file: ./app/Dockerfile
-          load: true # Load the image into local docker daemon for Trivy scanning
+          load: true
           tags: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
 
-      # DevSecOps Step: Scan the container image for vulnerabilities using Trivy
       - name: Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
           format: 'table'
-          exit-code: '1' # Fail the build if vulnerabilities are found
+          exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          trivyignores: .trivyignore
 
       - name: Log in to OCI Container Registry
         uses: docker/login-action@v3
@@ -92,7 +144,11 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
             ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:latest
 
+  # ─────────────────────────────────────────────────────────────
+  # JOB 4: GitOps tag update — only after successful push to main
+  # ─────────────────────────────────────────────────────────────
   gitops-deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build-scan-and-push
     runs-on: ubuntu-latest
     env:
@@ -101,7 +157,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          # Use personal access token (PAT) or standard GITHUB_TOKEN
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install yq
@@ -109,12 +164,10 @@ jobs:
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
-      # Update the image tag in values.yaml
       - name: Update Helm Chart Image Tag
         run: |
           yq -i ".image.tag = \"${{ env.IMAGE_TAG }}\"" helm/oke-app/values.yaml
 
-      # Commit and push back to git
       - name: Commit and Push Image Tag Update
         run: |
           git config --global user.name "github-actions[bot]"
