@@ -1,0 +1,128 @@
+name: CI/CD DevSecOps & GitOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'helm/oke-app/values.yaml' # Prevent infinite build loops when pipeline commits back
+      - 'README.md'
+      - 'terraform/**'
+      - '.gitignore'
+
+permissions:
+  contents: write # Required for committing changes back to git
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Linting Tools
+        run: |
+          pip install flake8
+          if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
+
+      - name: Run Python Flake8 Lint
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 app/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings.
+          flake8 app/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Run Helm Lint
+        run: |
+          helm lint helm/oke-app
+
+  build-scan-and-push:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: uk-london-1.ocir.io
+      NAMESPACE: lryo68b31h2j
+      REPOSITORY: oke-app
+      IMAGE_TAG: sha-${{ github.sha }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image locally
+        uses: docker/build-push-action@v5
+        with:
+          context: ./app
+          file: ./app/Dockerfile
+          load: true # Load the image into local docker daemon for Trivy scanning
+          tags: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      # DevSecOps Step: Scan the container image for vulnerabilities using Trivy
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+          format: 'table'
+          exit-code: '1' # Fail the build if vulnerabilities are found
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Log in to OCI Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.OCI_REGISTRY_USER }}
+          password: ${{ secrets.OCI_AUTH_TOKEN }}
+
+      - name: Push Docker Image to OCI Registry
+        uses: docker/build-push-action@v5
+        with:
+          context: ./app
+          file: ./app/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.REPOSITORY }}:latest
+
+  gitops-deploy:
+    needs: build-scan-and-push
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: sha-${{ github.sha }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          # Use personal access token (PAT) or standard GITHUB_TOKEN
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      # Update the image tag in values.yaml
+      - name: Update Helm Chart Image Tag
+        run: |
+          yq -i ".image.tag = \"${{ env.IMAGE_TAG }}\"" helm/oke-app/values.yaml
+
+      # Commit and push back to git
+      - name: Commit and Push Image Tag Update
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add helm/oke-app/values.yaml
+          git commit -m "chore(gitops): update image tag to ${{ env.IMAGE_TAG }} [skip ci]"
+          git push origin main
