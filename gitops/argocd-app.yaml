@@ -8,8 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    # UPDATE THIS to your actual GitHub repository URL
-    repoURL: 'https://github.com/ahmedibrahim/OKE-App.git'
+    repoURL: 'https://github.com/ahmedibrahim-lab/OKE-App.git'
     targetRevision: HEAD
     path: helm/oke-app
     helm:
