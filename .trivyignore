@@ -1,0 +1,3 @@
+# Ignore undici WebSocket memory leak in build-time npm tool
+# (npm is completely removed from our production container runtime)
+CVE-2026-12151

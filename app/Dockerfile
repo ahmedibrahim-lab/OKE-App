@@ -10,8 +10,10 @@ WORKDIR /usr/src/app
 # Copy dependency definitions
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm install --omit=dev --no-audit
+# Install only production dependencies and clean up npm/npx to eliminate build-time vulnerabilities
+RUN npm install --omit=dev --no-audit && \
+    npm cache clean --force && \
+    rm -rf /root/.npm /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 
 # Copy application source code
 COPY . .
