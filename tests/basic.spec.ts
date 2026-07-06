@@ -1,5 +1,3 @@
-import { test, expect } from '@playwright/test';
-
 test('has title', async ({ page }) => {
   await page.goto('http://143.47.254.99/#pod-info');
 
