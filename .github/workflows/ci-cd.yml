@@ -189,6 +189,8 @@ jobs:
   # JOB 5: Playwright Test after deployment
   # ─────────────────────────────────────────────────────────────
   playwright-test:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: gitops-deploy
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
