@@ -205,7 +205,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        find -maxdepth 2 -type d -ls
+        cd ./tests
         npm install --no-audit
 
     - name: Install Playwright Browsers
