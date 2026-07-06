@@ -13,6 +13,6 @@ test('get started link', async ({ page }) => {
   // Click the get started link.
   await page.getByRole('link', { name: 'Explore Pipeline' }).click();
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('span', { name: 'CI/CD DevSecOps & GitOps Pipeline' })).toBeVisible();
+  // Expects page to have a heading with the name of Actions.
+  await expect(page.getByRole('h2', { name: 'Actions' })).toBeVisible();
 });
