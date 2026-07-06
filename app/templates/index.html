@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKE Cloud-Native App</title>
+    <meta name="description" content="A beautiful, secure cloud-native application deployed on Oracle Container Engine for Kubernetes (OKE) with ArgoCD, Terraform, and GitHub Actions.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Background Animated Gradients -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <div class="app-container">
+        <!-- Header / Navigation -->
+        <header class="navbar">
+            <div class="logo">
+                <span class="logo-icon">▲</span>
+                <span class="logo-text">OKE<span class="highlight">.App</span></span>
+            </div>
+            <div class="nav-actions">
+                <span class="status-badge online">
+                    <span class="pulse-dot"></span> Cluster Online
+                </span>
+                <button id="theme-toggle" class="btn-theme" aria-label="Toggle Theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="2 2 20 20" stroke="currentColor">
+                        <circle cx="12" cy="12" r="5" stroke-width="2"/>
+                        <path stroke-linecap="round" stroke-width="2" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="2 2 20 20" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Hero Section -->
+        <main class="hero">
+            <div class="hero-content">
+                <div class="pill-announcement">
+                    <span class="pill-tag">DevSecOps</span> Deployed via GitHub Actions & GitOps
+                </div>
+                <h1>Modern Web Interface <br><span class="gradient-text">On Oracle Kubernetes</span></h1>
+                <p class="subtitle">This application serves as a live, highly-available entrypoint running on OKE. It leverages a robust architecture consisting of Terraform provisioning, Helm packaging, and ArgoCD synchronization.</p>
+                <div class="cta-group">
+                    <a href="#pod-info" class="btn-primary">View Cluster Stats</a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-secondary">Explore Pipeline</a>
+                </div>
+            </div>
+
+            <!-- Interactive Details Card -->
+            <div class="card-glass" id="pod-info">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="icon">☸</span>
+                        <h3>Pod Metadata</h3>
+                    </div>
+                    <button id="refresh-btn" class="btn-refresh" aria-label="Refresh Stats">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Pod Name</span>
+                            <span class="info-value code-font" id="pod-name">loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Namespace</span>
+                            <span class="info-value code-font" id="pod-namespace">loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Internal IP</span>
+                            <span class="info-value code-font" id="pod-ip">loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Worker Node</span>
+                            <span class="info-value code-font" id="node-name">loading...</span>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="cluster-summary">
+                        <div class="summary-stat">
+                            <span class="stat-label">Deploy Engine</span>
+                            <span class="stat-value" id="deploy-engine">ArgoCD / Helm</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="stat-label">Platform Provider</span>
+                            <span class="stat-value" id="provider">Oracle Cloud (OCI)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="security-status">
+                        <span class="lock-icon">🔒</span> DevSecOps verified: Trivy Scanned & Helm Linted
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Technical Architecture Cards -->
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h4>Strong DevSecOps</h4>
+                <p>GitHub Actions pipelines run static code analysis (Hadolint/Flake8) and image security scanning (Trivy) before deployment.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h4>GitOps via ArgoCD</h4>
+                <p>Continuous deployment model syncing cluster state with git definitions, providing drift detection and automated self-healing.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h4>Terraform Provisioned</h4>
+                <p>OCI Container Registry (OCIR) and infrastructure components managed safely using declarative, repeatable Terraform configuration.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p>&copy; 2026 OKE-App. Deployed on Oracle Cloud Free Tier. Designed for high scalability.</p>
+        </footer>
+    </div>
+
+    <!-- Client Script -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
