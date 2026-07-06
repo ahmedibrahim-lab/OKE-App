@@ -26,6 +26,7 @@ jobs:
   # JOB 1: Lint & Test — runs on BOTH PRs and pushes to main
   # ─────────────────────────────────────────────────────────────
   lint-and-test:
+    if: github.actor != 'OKE-App-Automation[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -94,7 +95,7 @@ jobs:
   # JOB 3: Build, scan, push, deploy — only on merge to main
   # ─────────────────────────────────────────────────────────────
   build-scan-and-push:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'OKE-App-Automation[bot]'
     needs: lint-and-test
     runs-on: ubuntu-latest
     env:
@@ -149,7 +150,7 @@ jobs:
   # JOB 4: GitOps tag update — only after successful push to main
   # ─────────────────────────────────────────────────────────────
   gitops-deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'OKE-App-Automation[bot]'
     needs: build-scan-and-push
     runs-on: ubuntu-latest
     env:
@@ -183,13 +184,13 @@ jobs:
           git config --global user.email "bot@oke-app.local"
           git add helm/oke-app/values.yaml
           git commit -m "chore(gitops): update image tag to ${{ env.IMAGE_TAG }} [skip ci]"
-          git push --force origin main
+          git push origin main
 
   # ─────────────────────────────────────────────────────────────
   # JOB 5: Playwright Test after deployment
   # ─────────────────────────────────────────────────────────────
   playwright-test:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'OKE-App-Automation[bot]'
     needs: gitops-deploy
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -199,8 +200,18 @@ jobs:
       with:
         node-version: lts/*
         
-    - name: Install dependencies
-      run: npm ci
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '24'
+
+    - name: Install Dependencies
+      run: |
+        cd app
+        npm install --no-audit
 
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
