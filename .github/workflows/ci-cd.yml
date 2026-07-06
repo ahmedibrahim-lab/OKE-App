@@ -183,4 +183,4 @@ jobs:
           git config --global user.email "bot@oke-app.local"
           git add helm/oke-app/values.yaml
           git commit -m "chore(gitops): update image tag to ${{ env.IMAGE_TAG }} [skip ci]"
-          git push origin main
+          git push --force origin main
