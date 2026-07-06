@@ -168,10 +168,23 @@ jobs:
         run: |
           yq -i ".image.tag = \"${{ env.IMAGE_TAG }}\"" helm/oke-app/values.yaml
 
-      - name: Commit and Push Image Tag Update
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add helm/oke-app/values.yaml
-          git commit -m "chore(gitops): update image tag to ${{ env.IMAGE_TAG }} [skip ci]"
-          git push origin main
+      - name: Create Pull Request for Image Tag Update
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(gitops): update image tag to ${{ env.IMAGE_TAG }}"
+          title: "chore(gitops): update image tag to ${{ env.IMAGE_TAG }}"
+          body: |
+           ## 🤖 Automated Image Tag Update
+            
+           This PR updates the Helm chart image tag to the latest build.
+            
+           **Image Tag:** `${{ env.IMAGE_TAG }}`
+           **Commit:** ${{ github.sha }}
+            
+           All security scans passed ✅
+            
+           This PR will auto-merge when all checks pass.
+          branch: gitops/update-image-tag-${{ github.sha }}
+          delete-branch: true
+          labels: "automation,gitops"
