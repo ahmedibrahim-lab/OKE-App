@@ -2,53 +2,43 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 2
-
 image:
   repository: uk-london-1.ocir.io/lryo68b31h2j/oke-app
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
-
+  tag: "sha-4a71e8415247d9b3d90fc8bf9a5142801b3a8d9b"
 # Image pull secret needed to pull the image from private OCI Container Registry
 imagePullSecrets:
   - name: ocir-secret
-
 nameOverride: ""
 fullnameOverride: ""
-
 serviceAccount:
   create: true
   automount: true
   annotations: {}
   name: ""
-
 podAnnotations: {}
 podLabels: {}
-
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 10001
   runAsGroup: 10001
   fsGroup: 10001
-
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: false
   runAsNonRoot: true
   runAsUser: 10001
   runAsGroup: 10001
-
 service:
   type: LoadBalancer
   port: 80
   targetPort: 5000
-
 ingress:
   enabled: false
-
 resources:
   limits:
     cpu: 200m
@@ -56,7 +46,6 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
-
 # Liveness/Readiness probes pointing to /api/info
 livenessProbe:
   httpGet:
@@ -66,7 +55,6 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 3
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /api/info
@@ -75,18 +63,13 @@ readinessProbe:
   periodSeconds: 10
   timeoutSeconds: 3
   failureThreshold: 3
-
 autoscaling:
   enabled: false
-
 volumes: []
 volumeMounts: []
-
 nodeSelector: {}
 tolerations: []
 affinity: {}
-
 # Gateway API routing (disabled by default)
 httpRoute:
   enabled: false
-
