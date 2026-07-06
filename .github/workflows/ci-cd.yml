@@ -20,23 +20,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          node-version: '24'
 
-      - name: Install Linting Tools
+      - name: Install Dependencies
         run: |
-          pip install flake8
-          if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
+          cd app
+          npm install --no-audit
 
-      - name: Run Python Flake8 Lint
+      - name: Run JavaScript Syntax Check
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 app/ --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings.
-          flake8 app/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          node --check app/app.js
 
       - name: Set up Helm
         uses: azure/setup-helm@v4

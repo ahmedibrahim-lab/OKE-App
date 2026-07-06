@@ -1,0 +1,20 @@
+{
+  "name": "oke-app",
+  "version": "1.0.0",
+  "description": "A beautiful cloud-native web application deployed on OKE",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  },
+  "private": true
+}

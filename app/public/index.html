@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <!-- Custom Style -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Background Animated Gradients -->
@@ -110,7 +110,7 @@
             <div class="feature-card">
                 <div class="feature-icon">🛡️</div>
                 <h4>Strong DevSecOps</h4>
-                <p>GitHub Actions pipelines run static code analysis (Hadolint/Flake8) and image security scanning (Trivy) before deployment.</p>
+                <p>GitHub Actions pipelines run static code analysis (ESLint/Helm Lint) and image security scanning (Trivy) before deployment.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🔄</div>
@@ -131,6 +131,6 @@
     </div>
 
     <!-- Client Script -->
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="main.js"></script>
 </body>
 </html>

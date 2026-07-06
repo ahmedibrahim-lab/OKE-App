@@ -32,7 +32,7 @@ graph TD
 ```
 
 ### Key Components:
-- **Application**: Lightweight Python Flask backend serving a responsive, animated glassmorphic frontend utilizing modern CSS, dark/light theme options, and custom Google Fonts (`Outfit` / `JetBrains Mono`). It queries the Kubernetes Downward API to dynamically report host nodes, namespaces, and pod details.
+- **Application**: Lightweight Node.js Express backend serving a responsive, animated glassmorphic frontend utilizing modern CSS, dark/light theme options, and custom Google Fonts (`Outfit` / `JetBrains Mono`). It queries the Kubernetes Downward API to dynamically report host nodes, namespaces, and pod details.
 - **Infrastructure**: OCI Container Registry (OCIR) resource created and managed declaratively via **Terraform**.
 - **Packaging**: **Helm Chart** configuring high-availability replicas, container resources limits, non-root execution contexts, and standard TCP routing.
 - **DevSecOps**: **GitHub Actions** runs syntax linting, Helm verification, and **Aqua Trivy** image security scans to block builds containing critical/high vulnerabilities.
@@ -125,18 +125,14 @@ http://<EXTERNAL_IP>
 
 ## 🛠️ Local Development
 
-To run the Flask application locally for frontend iterations:
+To run the Node.js application locally for frontend iterations:
 
 ```bash
 cd app
-# 1. Create a virtual environment
-python3 -m venv venv
-source venv/bin/activate
+# 1. Install dependencies
+npm install
 
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Launch Flask
-python3 app.py
+# 2. Launch Express Server
+npm start
 ```
 Open [http://localhost:5000](http://localhost:5000) to view the live dashboard.

@@ -1,31 +1,29 @@
-# Build stage or single stage for python-slim
-FROM python:3.11-slim AS base
+# Production Stage
+FROM node:24-alpine AS base
 
-# Prevent python from writing pyc files to disk and buffering stdout/stderr
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Set production environment and port
+ENV NODE_ENV=production
 ENV PORT=5000
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Create a non-privileged user that the app will run under.
-# This prevents root-level privilege escalation vulnerabilities.
-RUN groupadd --gid 10001 appuser && \
-    useradd --uid 10001 --gid 10001 --shell /bin/bash --create-home appuser
+# Copy dependency definitions
+COPY package*.json ./
 
-# Install requirements
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install only production dependencies
+RUN npm install --omit=dev --no-audit
 
-# Copy source code and change ownership to appuser
+# Copy application source code
 COPY . .
-RUN chown -R appuser:appuser /app
 
-# Switch to the non-privileged user
-USER appuser
+# Change ownership of the directory to the non-privileged 'node' user
+RUN chown -R node:node /usr/src/app
+
+# Switch to non-privileged user for runtime security
+USER node
 
 # Expose port
 EXPOSE 5000
 
-# Run with Gunicorn WSGI server for production-grade concurrency
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "4", "app:app"]
+# Start server
+CMD ["node", "app.js"]
