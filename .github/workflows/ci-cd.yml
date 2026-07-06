@@ -19,6 +19,7 @@ on:
 permissions:
   contents: write      # Required for committing image tag back to git
   pull-requests: write # Required to post status checks on PRs
+  id-token: write      # Required for GitHub App token exchange
 
 jobs:
   # ─────────────────────────────────────────────────────────────
@@ -154,10 +155,18 @@ jobs:
     env:
       IMAGE_TAG: sha-${{ github.sha }}
     steps:
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.OKE_APP_AUTOMATION_APPID }}
+          private-key: ${{ secrets.OKE_APP_AUTOMATION_SECRET }}
+
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
 
       - name: Install yq
         run: |
@@ -170,8 +179,8 @@ jobs:
 
       - name: Commit and Push Image Tag Update
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "OKE-App-Automation[bot]"
+          git config --global user.email "bot@oke-app.local"
           git add helm/oke-app/values.yaml
           git commit -m "chore(gitops): update image tag to ${{ env.IMAGE_TAG }} [skip ci]"
           git push origin main
