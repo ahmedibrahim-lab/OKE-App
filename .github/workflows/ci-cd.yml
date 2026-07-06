@@ -205,8 +205,8 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        cd ./tests
-        npm install --no-audit
+        cd tests
+        npm i -D @playwright/test
 
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
