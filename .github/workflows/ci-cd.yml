@@ -48,8 +48,7 @@ jobs:
       - name: OWASP Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: 'OKE-App'
-          path: 'app'
+          path: '.'
           format: 'HTML'
           out: 'reports' # this is the default, no need to specify unless you wish to override it
           args: >
