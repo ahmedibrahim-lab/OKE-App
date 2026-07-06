@@ -6,7 +6,7 @@ image:
   repository: uk-london-1.ocir.io/lryo68b31h2j/oke-app
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "sha-17183dfbb4a607365bdec36402c797f645cf1c97"
+  tag: "sha-c4f5d3ec40a8a2e8c7f0d9208e0fa09f81acd6c4"
 # Image pull secret needed to pull the image from private OCI Container Registry
 imagePullSecrets:
   - name: ocir-secret
