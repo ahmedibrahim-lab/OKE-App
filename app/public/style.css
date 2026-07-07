@@ -537,6 +537,9 @@ body {
     .hero-content {
         align-items: center;
         text-align: center;
+    }
+}
+
 /* Pod Health Metrics Card */
 .metrics-grid {
    display: grid;

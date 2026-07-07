@@ -7,12 +7,20 @@ test('has title', async ({ page }) => {
   await expect(page).toHaveTitle(/OKE Cloud-Native App/);
 });
 
-test('get started link', async ({ page }) => {
+test('explore pipeline link', async ({ page }) => {
   await page.goto('http://143.47.254.99/#pod-info');
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Explore Pipeline' }).click();
+  // Wait for the new page to open
+  const [newPage] = await Promise.all([
+    page.waitForEvent('popup'),
+    page.getByRole('link', { name: 'Explore Pipeline' }).click(),
+  ]);
 
-  // Expects page to have a heading with the name of Actions.
-  await expect(page).toHaveURL('https://github.com/ahmedibrahim-lab/OKE-App/actions');
+  // Wait for the new page to finish loading
+  await newPage.waitForLoadState();
+
+  // Assert the URL
+  await expect(newPage).toHaveURL(
+    'https://github.com/ahmedibrahim-lab/OKE-App/actions'
+  );
 });
