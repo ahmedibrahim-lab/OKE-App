@@ -146,6 +146,81 @@
             </div>
         </main>
 
+        <section class="architecture">
+            <div class="section-heading">
+                <span class="pill-announcement">
+                    <span class="pill-tag">Architecture</span>
+                    End-to-End Cloud Deployment
+                </span>
+
+                <h2>Cloud Native Deployment Pipeline</h2>
+
+                <p>
+                    Every deployment follows a secure GitOps workflow. Infrastructure is
+                    provisioned with Terraform, applications are containerised with Docker,
+                    validated by GitHub Actions and Trivy, stored in OCI Container Registry,
+                    and continuously deployed to Oracle Kubernetes Engine using ArgoCD.
+                </p>
+            </div>
+
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <span>👨‍💻</span>
+                    <h4>Developer</h4>
+                    <p>Commit code</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-step">
+                    <span>🐙</span>
+                    <h4>GitHub</h4>
+                    <p>Version Control</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-step">
+                    <span>⚙️</span>
+                    <h4>GitHub Actions</h4>
+                    <p>CI Pipeline</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-step">
+                    <span>🔒</span>
+                    <h4>Trivy</h4>
+                    <p>Security Scan</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-step">
+                    <span>📦</span>
+                    <h4>OCIR</h4>
+                    <p>Container Registry</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-step">
+                    <span>🚀</span>
+                    <h4>ArgoCD</h4>
+                    <p>GitOps Sync</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-step">
+                    <span>☸</span>
+                    <h4>OKE</h4>
+                    <p>Kubernetes</p>
+                </div>
+            </div>
+        </section>
+
+
         <!-- Technical Architecture Cards -->
         <section class="features">
             <div class="feature-card">
