@@ -14,5 +14,5 @@ test('get started link', async ({ page }) => {
   await page.getByRole('link', { name: 'Explore Pipeline' }).click();
 
   // Expects page to have a heading with the name of Actions.
-  await expect(page.toHaveURL('https://github.com/ahmedibrahim-lab/OKE-App/actions')).toBeVisible();
+  await expect(page).toHaveURL('https://github.com/ahmedibrahim-lab/OKE-App/actions');
 });
