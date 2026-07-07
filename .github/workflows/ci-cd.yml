@@ -210,9 +210,6 @@ jobs:
 
     - name: Install Dependencies
       run: npm i -D @playwright/test
-    
-    - name: Wait for ArgoCD
-      run: sleep 150
 
     - name: Run Playwright tests
       run: npx playwright test
