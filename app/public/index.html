@@ -52,6 +52,8 @@
                     A production-inspired Node.js application deployed to Oracle
                     Container Engine for Kubernetes using Terraform, Docker,
                     Helm, GitHub Actions, Trivy and ArgoCD.
+                </p>
+                <p class="subtitle">
                     This dashboard visualises live Kubernetes metadata,
                     deployment health and cloud infrastructure in real time.
                 </p>
@@ -109,60 +111,48 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Pod Health Metrics Card -->
-            <div class="card-glass" id="health-info">
-                <div class="card-header">
-                    <div class="card-title">
-                        <span class="icon">💚</span>
-                        <h3>Pod Health Status</h3>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="metrics-grid">
-                        <!-- Memory Usage -->
-                        <div class="metric-card">
-                            <div class="metric-label">Memory Usage</div>
-                            <div class="metric-value" id="memory-used">--</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="memory-bar" style="width: 100%"></div>
-                            </div>
-                            <p class="metric-detail" id="memory-label">0MB / 256MB</p>
-                        </div>
-
-                        <!-- Pod Uptime -->
-                        <div class="metric-card">
-                            <div class="metric-label">Pod Uptime</div>
-                            <div class="metric-value" id="uptime-value">--</div>
-                            <div class="uptime-bar"></div>
-                            <p class="metric-detail" id="uptime-label">0s</p>
-                        </div>
-
-                        <!-- Health Status -->
-                        <div class="metric-card">
-                            <div class="metric-label">Overall Status</div>
-                            <div class="health-badge" id="health-status">
-                                <span class="status-indicator" id="status-dot"></span>
-                                <span id="status-text">--</span>
-                            </div>
-                            <div class="health-checks" id="health-checks"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="metric-card">
-                <div class="metric-label">Deployment</div>
-
-                <div class="metric-value">
-                    GitOps
-                </div>
-
-                <p class="metric-detail">
-                    Helm • ArgoCD
-                </p>
-            </div>
         </main>
+
+        <!-- Pod Health Metrics Card -->
+        <div class="card-glass" id="health-info">
+            <div class="card-header">
+                <div class="card-title">
+                    <span class="icon">💚</span>
+                    <h3>Pod Health Status</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="metrics-grid">
+                    <!-- Memory Usage -->
+                    <div class="metric-card">
+                        <div class="metric-label">Memory Usage</div>
+                        <div class="metric-value" id="memory-used">--</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="memory-bar" style="width: 100%"></div>
+                        </div>
+                        <p class="metric-detail" id="memory-label">0MB / 256MB</p>
+                    </div>
+
+                    <!-- Pod Uptime -->
+                    <div class="metric-card">
+                        <div class="metric-label">Pod Uptime</div>
+                        <div class="metric-value" id="uptime-value">--</div>
+                        <div class="uptime-bar"></div>
+                        <p class="metric-detail" id="uptime-label">0s</p>
+                    </div>
+
+                    <!-- Health Status -->
+                    <div class="metric-card">
+                        <div class="metric-label">Overall Status</div>
+                        <div class="health-badge" id="health-status">
+                            <span class="status-indicator" id="status-dot"></span>
+                            <span id="status-text">--</span>
+                        </div>
+                        <div class="health-checks" id="health-checks"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <section class="architecture">
             <div class="section-heading">
@@ -182,71 +172,49 @@
             </div>
 
             <div class="pipeline">
-                <div class="pipeline-step">
-                    <span>👨‍💻</span>
+
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">👨‍💻</div>
                     <h4>Developer</h4>
-                    <p>Commit code</p>
+                    <p>Commit Code</p>
                 </div>
 
-                <div class="pipeline-divider">
-                    <span></span>
-                </div>
-
-                <div class="pipeline-step">
-                    <span>🐙</span>
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">🐙</div>
                     <h4>GitHub</h4>
                     <p>Version Control</p>
                 </div>
 
-                <div class="pipeline-divider">
-                    <span></span>
-                </div>
-
-                <div class="pipeline-step">
-                    <span>⚙️</span>
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">⚙️</div>
                     <h4>GitHub Actions</h4>
                     <p>CI Pipeline</p>
                 </div>
 
-                <div class="pipeline-divider">
-                    <span></span>
-                </div>
-
-                <div class="pipeline-step">
-                    <span>🔒</span>
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">🔒</div>
                     <h4>Trivy</h4>
                     <p>Security Scan</p>
                 </div>
 
-                <div class="pipeline-divider">
-                    <span></span>
-                </div>
-
-                <div class="pipeline-step">
-                    <span>📦</span>
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">📦</div>
                     <h4>OCIR</h4>
-                    <p>Container Registry</p>
+                    <p>Store Image</p>
                 </div>
 
-                <div class="pipeline-divider">
-                    <span></span>
-                </div>
-
-                <div class="pipeline-step">
-                    <span>🚀</span>
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">🚀</div>
                     <h4>ArgoCD</h4>
                     <p>GitOps Sync</p>
                 </div>
 
-                <div class="pipeline-divider">
-                    <span></span>
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">☸</div>
+                    <h4>OKE</h4>
+                    <p>Deploy</p>
                 </div>
 
-                <div class="pipeline-step">
-                    <span>☸</span>
-                    <h4>OKE</h4>
-                    <p>Kubernetes</p>
-                </div>
             </div>
         </section>
 
@@ -254,36 +222,48 @@
         <!-- Technical Architecture Cards -->
         <section class="features">
             <div class="feature-card">
-                <div class="feature-icon">🛡️</div>
-                <h4>Strong DevSecOps</h4>
-                <p>GitHub Actions pipelines run static code analysis (ESLint/Helm Lint) and image security scanning (Trivy) before deployment.</p>
+                <div class="feature-icon">☁</div>
+                <h4>Oracle Kubernetes Engine</h4>
+                <p>Managed Kubernetes service hosting the application.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🔄</div>
-                <h4>GitOps via ArgoCD</h4>
-                <p>Continuous deployment model syncing cluster state with git definitions, providing drift detection and automated self-healing.</p>
+                <div class="feature-icon">🏗</div>
+                <h4>Terraform</h4>
+                <p>Infrastructure provisioned using Infrastructure as Code.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">⚙️</div>
-                <h4>Terraform Provisioned</h4>
-                <p>OCI Container Registry (OCIR) and infrastructure components managed safely using declarative, repeatable Terraform configuration.</p>
+                <div class="feature-icon">📦</div>
+                <h4>Docker</h4>
+                <p>Application packaged into secure lightweight containers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚓</div>
+                <h4>Helm</h4>
+                <p>Reusable Kubernetes deployments and templating.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙</div>
+                <h4>GitHub Actions</h4>
+                <p>Automated CI/CD pipeline for build, testing and deployment.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h4>ArgoCD</h4>
+                <p>Automated CI/CD pipeline for build, testing and deployment.</p>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="main-footer">
-            <p>
-                &copy; 2026 OKE-App. Powered by
-
-                Oracle Kubernetes Engine
-                Terraform
-                Docker
-                Helm
-                GitHub Actions
-                ArgoCD
-                Trivy
-                Express.js
-            </p>
+            <p> &copy; 2026 OKE-App. Powered by </p>
+            <p> Oracle Kubernetes Engine </p>
+            <p> Terraform </p>
+            <p> Docker </p>
+            <p> Helm </p>
+            <p> GitHub Actions </p>
+            <p> ArgoCD </p>
+            <p> Trivy </p>
+            <p> Express.js </p>
         </footer>
     </div>
 
