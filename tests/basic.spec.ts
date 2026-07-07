@@ -21,6 +21,6 @@ test('explore pipeline link', async ({ page }) => {
 
   // Assert the URL
   await expect(newPage).toHaveURL(
-    'https://github.com/ahmedibrahim-lab/OKE-App/actions'
+    'https://github.com/ahmedibrahim-lab/OKE-App/actions/workflows/ci-cd.yml'
   );
 });
