@@ -47,8 +47,14 @@
                 <div class="pill-announcement">
                     <span class="pill-tag">DevSecOps</span> Deployed via GitHub Actions & GitOps
                 </div>
-                <h1>Modern Web Interface <br><span class="gradient-text">On Oracle Kubernetes</span></h1>
-                <p class="subtitle">This application serves as a live, highly-available entrypoint running on OKE. It leverages a robust architecture consisting of Terraform provisioning, Helm packaging, and ArgoCD synchronization.</p>
+                <h1>Cloud Native <br><span class="gradient-text">DevSecOps Demonstration</span></h1>
+                <p class="subtitle">
+                    A production-inspired Node.js application deployed to Oracle
+                    Container Engine for Kubernetes using Terraform, Docker,
+                    Helm, GitHub Actions, Trivy and ArgoCD.
+                    This dashboard visualises live Kubernetes metadata,
+                    deployment health and cloud infrastructure in real time.
+                </p>
                 <div class="cta-group">
                     <a href="#pod-info" class="btn-primary">View Cluster Stats</a>
                     <a href="https://github.com/ahmedibrahim-lab/OKE-App/actions/workflows/ci-cd.yml" target="_blank" rel="noopener noreferrer" class="btn-secondary">Explore Pipeline</a>
@@ -144,7 +150,106 @@
                     </div>
                 </div>
             </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Deployment</div>
+
+                <div class="metric-value">
+                    GitOps
+                </div>
+
+                <p class="metric-detail">
+                    Helm • ArgoCD
+                </p>
+            </div>
         </main>
+
+        <section class="architecture">
+            <div class="section-heading">
+                <span class="pill-announcement">
+                    <span class="pill-tag">Architecture</span>
+                    End-to-End Cloud Deployment
+                </span>
+
+                <h2>Cloud Native Deployment Pipeline</h2>
+
+                <p>
+                    Every deployment follows a secure GitOps workflow. Infrastructure is
+                    provisioned with Terraform, applications are containerised with Docker,
+                    validated by GitHub Actions and Trivy, stored in OCI Container Registry,
+                    and continuously deployed to Oracle Kubernetes Engine using ArgoCD.
+                </p>
+            </div>
+
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <span>👨‍💻</span>
+                    <h4>Developer</h4>
+                    <p>Commit code</p>
+                </div>
+
+                <div class="pipeline-divider">
+                    <span></span>
+                </div>
+
+                <div class="pipeline-step">
+                    <span>🐙</span>
+                    <h4>GitHub</h4>
+                    <p>Version Control</p>
+                </div>
+
+                <div class="pipeline-divider">
+                    <span></span>
+                </div>
+
+                <div class="pipeline-step">
+                    <span>⚙️</span>
+                    <h4>GitHub Actions</h4>
+                    <p>CI Pipeline</p>
+                </div>
+
+                <div class="pipeline-divider">
+                    <span></span>
+                </div>
+
+                <div class="pipeline-step">
+                    <span>🔒</span>
+                    <h4>Trivy</h4>
+                    <p>Security Scan</p>
+                </div>
+
+                <div class="pipeline-divider">
+                    <span></span>
+                </div>
+
+                <div class="pipeline-step">
+                    <span>📦</span>
+                    <h4>OCIR</h4>
+                    <p>Container Registry</p>
+                </div>
+
+                <div class="pipeline-divider">
+                    <span></span>
+                </div>
+
+                <div class="pipeline-step">
+                    <span>🚀</span>
+                    <h4>ArgoCD</h4>
+                    <p>GitOps Sync</p>
+                </div>
+
+                <div class="pipeline-divider">
+                    <span></span>
+                </div>
+
+                <div class="pipeline-step">
+                    <span>☸</span>
+                    <h4>OKE</h4>
+                    <p>Kubernetes</p>
+                </div>
+            </div>
+        </section>
+
 
         <!-- Technical Architecture Cards -->
         <section class="features">
@@ -167,7 +272,18 @@
 
         <!-- Footer -->
         <footer class="main-footer">
-            <p>&copy; 2026 OKE-App. Deployed on Oracle Cloud Free Tier. Designed for high scalability.</p>
+            <p>
+                &copy; 2026 OKE-App. Powered by
+
+                Oracle Kubernetes Engine
+                Terraform
+                Docker
+                Helm
+                GitHub Actions
+                ArgoCD
+                Trivy
+                Express.js
+            </p>
         </footer>
     </div>
 
